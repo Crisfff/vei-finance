@@ -2,12 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
   >
-
   <meta name="theme-color" content="#0b0c10">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -20,7 +18,7 @@
       --background: #0b0c10;
       --surface: #15171d;
       --surface-light: #1c1f27;
-      --surface-soft: #20232c;
+      --surface-soft: #22252d;
       --text: #f7f7fa;
       --text-secondary: #9296a2;
       --text-soft: #666b78;
@@ -50,7 +48,7 @@
       background:
         radial-gradient(
           circle at top right,
-          rgba(168, 85, 247, 0.12),
+          rgba(168, 85, 247, 0.13),
           transparent 30%
         ),
         var(--background);
@@ -81,6 +79,10 @@
       outline: none;
     }
 
+    .hidden {
+      display: none !important;
+    }
+
     .app {
       width: 100%;
       max-width: 520px;
@@ -89,11 +91,15 @@
       padding:
         calc(env(safe-area-inset-top) + 20px)
         18px
-        calc(env(safe-area-inset-bottom) + 112px);
+        calc(env(safe-area-inset-bottom) + 118px);
     }
 
-    .hidden {
-      display: none !important;
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
     }
 
     .topbar {
@@ -109,13 +115,15 @@
       margin-bottom: 5px;
     }
 
-    .topbar h1 {
+    .topbar h1,
+    .page-title {
       margin: 0;
       font-size: 27px;
       letter-spacing: -0.8px;
     }
 
-    .settings-button {
+    .settings-button,
+    .icon-button {
       width: 46px;
       height: 46px;
       border-radius: 16px;
@@ -256,6 +264,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 14px;
       margin-bottom: 14px;
     }
 
@@ -265,21 +274,204 @@
       letter-spacing: -0.4px;
     }
 
-    .section-header button {
+    .link-button {
       padding: 0;
       background: transparent;
       color: var(--accent);
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
-    .summary-grid {
+    .cards-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 2px 2px 6px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .cards-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .wallet-card {
+      position: relative;
+      min-width: 265px;
+      height: 154px;
+      overflow: hidden;
+      padding: 19px;
+      border-radius: 25px;
+      color: #fff;
+      scroll-snap-align: start;
+      background: linear-gradient(135deg, var(--card-color-1), var(--card-color-2));
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.25);
+    }
+
+    .wallet-card::after {
+      content: "";
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      right: -62px;
+      bottom: -84px;
+      border: 23px solid rgba(255, 255, 255, 0.09);
+      border-radius: 50%;
+    }
+
+    .wallet-card-top,
+    .wallet-card-balance,
+    .wallet-card-footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    .wallet-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .wallet-card-name {
+      min-width: 0;
+      font-weight: 750;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .wallet-card-number {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .wallet-card-balance {
+      margin-top: 29px;
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .wallet-card-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 12px;
+    }
+
+    .cards-grid {
+      display: grid;
+      gap: 13px;
+    }
+
+    .card-detail {
+      padding: 17px;
+      border-radius: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .card-detail-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-chip {
+      width: 42px;
+      height: 29px;
+      margin-bottom: 12px;
+      border-radius: 9px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.85),
+          rgba(255, 255, 255, 0.35)
+        );
+    }
+
+    .card-detail h3 {
+      margin: 0 0 4px;
+      font-size: 17px;
+    }
+
+    .card-detail small {
+      color: var(--text-secondary);
+    }
+
+    .card-color-dot {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--card-color-1);
+      box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.04);
+    }
+
+    .card-detail-balance {
+      margin: 20px 0 12px;
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .card-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .card-stat {
+      padding: 11px;
+      border-radius: 15px;
+      background: var(--surface-light);
+    }
+
+    .card-stat span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text-secondary);
+      font-size: 11px;
+    }
+
+    .card-stat strong {
+      font-size: 13px;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .small-button {
+      min-height: 43px;
+      border-radius: 14px;
+      background: var(--surface-light);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .small-button.danger {
+      color: var(--expense);
+    }
+
+    .summary-grid,
+    .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
     }
 
-    .summary-card {
+    .summary-card,
+    .stat-card {
       min-height: 120px;
       padding: 18px;
       border-radius: 24px;
@@ -292,13 +484,15 @@
       min-height: 136px;
     }
 
-    .summary-label {
+    .summary-label,
+    .stat-card span {
       color: var(--text-secondary);
       font-size: 13px;
       margin-bottom: 9px;
     }
 
-    .summary-number {
+    .summary-number,
+    .stat-card strong {
       display: block;
       font-size: 24px;
       letter-spacing: -0.8px;
@@ -445,8 +639,8 @@
 
     .note-card .delete-button {
       position: absolute;
-      right: 12px;
       top: 12px;
+      right: 12px;
     }
 
     .empty-state {
@@ -470,7 +664,7 @@
       max-width: 490px;
       padding: 8px;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       border-radius: 25px;
       background: rgba(24, 26, 33, 0.88);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -488,12 +682,12 @@
       align-items: center;
       justify-content: center;
       gap: 5px;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 650;
     }
 
     .nav-button strong {
-      font-size: 19px;
+      font-size: 18px;
       line-height: 1;
     }
 
@@ -628,25 +822,6 @@
       line-height: 1.5;
     }
 
-    .amount-field {
-      position: relative;
-    }
-
-    .amount-field .currency {
-      position: absolute;
-      top: 50%;
-      left: 16px;
-      transform: translateY(-50%);
-      color: var(--text-secondary);
-      font-weight: 700;
-    }
-
-    .amount-field input {
-      padding-left: 38px;
-      font-size: 20px;
-      font-weight: 700;
-    }
-
     .save-button {
       width: 100%;
       min-height: 54px;
@@ -657,40 +832,6 @@
       font-size: 15px;
       font-weight: 700;
       box-shadow: 0 14px 30px rgba(124, 58, 237, 0.24);
-    }
-
-    .page {
-      display: none;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    .page-title {
-      margin: 0 0 20px;
-      font-size: 27px;
-      letter-spacing: -0.8px;
-    }
-
-    .stat-box {
-      padding: 20px;
-      margin-bottom: 12px;
-      border-radius: 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-    }
-
-    .stat-box span {
-      color: var(--text-secondary);
-      font-size: 13px;
-    }
-
-    .stat-box strong {
-      display: block;
-      margin-top: 8px;
-      font-size: 26px;
-      letter-spacing: -0.8px;
     }
 
     @media (min-width: 700px) {
@@ -711,13 +852,18 @@
           <h1>Hola, Cris</h1>
         </div>
 
-        <button class="settings-button" type="button" aria-label="Ajustes">
+        <button
+          id="settingsButton"
+          class="settings-button"
+          type="button"
+          aria-label="Ajustes"
+        >
           ⚙
         </button>
       </header>
 
       <article class="balance-card">
-        <div class="balance-label">Saldo disponible</div>
+        <div class="balance-label">Saldo total disponible</div>
         <h2 id="balanceValue" class="balance-value">0,00 €</h2>
 
         <div class="balance-info">
@@ -737,7 +883,7 @@
         <button
           class="quick-button income"
           type="button"
-          data-open-modal="income"
+          data-open-entry="income"
         >
           <span class="quick-icon">+</span>
           <span>Ingreso</span>
@@ -746,7 +892,7 @@
         <button
           class="quick-button expense"
           type="button"
-          data-open-modal="expense"
+          data-open-entry="expense"
         >
           <span class="quick-icon">−</span>
           <span>Gasto</span>
@@ -755,12 +901,27 @@
         <button
           class="quick-button note"
           type="button"
-          data-open-modal="note"
+          data-open-entry="note"
         >
           <span class="quick-icon">✎</span>
           <span>Nota</span>
         </button>
       </div>
+
+      <section class="section">
+        <div class="section-header">
+          <h2>Mis tarjetas</h2>
+          <button
+            id="showCardsButton"
+            class="link-button"
+            type="button"
+          >
+            Ver todas
+          </button>
+        </div>
+
+        <div id="homeCardsList" class="cards-scroll"></div>
+      </section>
 
       <section class="section">
         <div class="section-header">
@@ -804,35 +965,59 @@
       <section class="section">
         <div class="section-header">
           <h2>Últimos movimientos</h2>
-          <button id="showAllButton" type="button">Ver todos</button>
+          <button id="showAllButton" class="link-button" type="button">
+            Ver todos
+          </button>
         </div>
 
         <div id="transactionsList" class="transactions-list"></div>
       </section>
     </section>
 
+    <section id="cardsPage" class="page">
+      <header class="topbar">
+        <div>
+          <div class="welcome">Organiza tu dinero</div>
+          <h1 class="page-title">Tarjetas</h1>
+        </div>
+
+        <button
+          id="addCardButton"
+          class="icon-button"
+          type="button"
+          aria-label="Añadir tarjeta"
+        >
+          +
+        </button>
+      </header>
+
+      <div id="cardsGrid" class="cards-grid"></div>
+    </section>
+
     <section id="statsPage" class="page">
       <h1 class="page-title">Estadísticas</h1>
 
-      <article class="stat-box">
-        <span>Saldo actual</span>
-        <strong id="statsBalance">0,00 €</strong>
-      </article>
+      <div class="stats-grid section">
+        <article class="stat-card">
+          <span>Saldo total</span>
+          <strong id="statsBalance">0,00 €</strong>
+        </article>
 
-      <article class="stat-box">
-        <span>Total de ingresos</span>
-        <strong id="statsIncome">0,00 €</strong>
-      </article>
+        <article class="stat-card">
+          <span>Tarjetas</span>
+          <strong id="statsCards">0</strong>
+        </article>
 
-      <article class="stat-box">
-        <span>Total de gastos</span>
-        <strong id="statsExpense">0,00 €</strong>
-      </article>
+        <article class="stat-card">
+          <span>Total ingresos</span>
+          <strong id="statsIncome">0,00 €</strong>
+        </article>
 
-      <article class="stat-box">
-        <span>Movimientos registrados</span>
-        <strong id="statsTransactions">0</strong>
-      </article>
+        <article class="stat-card">
+          <span>Total gastos</span>
+          <strong id="statsExpense">0,00 €</strong>
+        </article>
+      </div>
 
       <section class="section">
         <div class="section-header">
@@ -844,7 +1029,21 @@
     </section>
 
     <section id="notesPage" class="page">
-      <h1 class="page-title">Notas</h1>
+      <header class="topbar">
+        <div>
+          <div class="welcome">Apuntes y recordatorios</div>
+          <h1 class="page-title">Notas</h1>
+        </div>
+
+        <button
+          id="addNoteButton"
+          class="icon-button"
+          type="button"
+          aria-label="Añadir nota"
+        >
+          +
+        </button>
+      </header>
 
       <div id="notesList" class="notes-list"></div>
     </section>
@@ -865,6 +1064,11 @@
       <span>Inicio</span>
     </button>
 
+    <button class="nav-button" type="button" data-page="cardsPage">
+      <strong>▣</strong>
+      <span>Tarjetas</span>
+    </button>
+
     <button class="nav-button" type="button" data-page="statsPage">
       <strong>◔</strong>
       <span>Estadísticas</span>
@@ -876,13 +1080,13 @@
     </button>
   </nav>
 
-  <div id="modalOverlay" class="modal-overlay hidden">
+  <div id="entryModalOverlay" class="modal-overlay hidden">
     <section class="modal">
       <div class="modal-header">
-        <h2 id="modalTitle">Nuevo movimiento</h2>
+        <h2 id="entryModalTitle">Nuevo movimiento</h2>
 
         <button
-          id="closeModalButton"
+          id="closeEntryModalButton"
           class="close-button"
           type="button"
           aria-label="Cerrar"
@@ -895,7 +1099,7 @@
         <button
           class="type-button active"
           type="button"
-          data-type="income"
+          data-entry-type="income"
         >
           Ingreso
         </button>
@@ -903,7 +1107,7 @@
         <button
           class="type-button"
           type="button"
-          data-type="expense"
+          data-entry-type="expense"
         >
           Gasto
         </button>
@@ -911,7 +1115,7 @@
         <button
           class="type-button"
           type="button"
-          data-type="note"
+          data-entry-type="note"
         >
           Nota
         </button>
@@ -921,25 +1125,24 @@
         <div id="moneyFields">
           <div class="form-group">
             <label for="amountInput">Cantidad</label>
+            <input
+              id="amountInput"
+              class="field"
+              type="number"
+              inputmode="decimal"
+              min="0"
+              step="0.01"
+              placeholder="0,00"
+            >
+          </div>
 
-            <div class="amount-field">
-              <span class="currency">€</span>
-
-              <input
-                id="amountInput"
-                class="field"
-                type="number"
-                inputmode="decimal"
-                min="0"
-                step="0.01"
-                placeholder="0,00"
-              >
-            </div>
+          <div class="form-group">
+            <label for="cardInput">Tarjeta</label>
+            <select id="cardInput" class="field"></select>
           </div>
 
           <div class="form-group">
             <label for="categoryInput">Categoría</label>
-
             <select id="categoryInput" class="field">
               <option value="Otros">Otros</option>
               <option value="Remesas">Remesas</option>
@@ -956,31 +1159,24 @@
 
           <div class="form-group">
             <label for="descriptionInput">Descripción</label>
-
             <input
               id="descriptionInput"
               class="field"
               type="text"
               maxlength="60"
-              placeholder="Ejemplo: Pago recibido"
+              placeholder="Ejemplo: Compra del supermercado"
             >
           </div>
 
           <div class="form-group">
             <label for="dateInput">Fecha</label>
-
-            <input
-              id="dateInput"
-              class="field"
-              type="date"
-            >
+            <input id="dateInput" class="field" type="date">
           </div>
         </div>
 
         <div id="noteFields" class="hidden">
           <div class="form-group">
             <label for="noteTitleInput">Título</label>
-
             <input
               id="noteTitleInput"
               class="field"
@@ -992,7 +1188,6 @@
 
           <div class="form-group">
             <label for="noteTextInput">Nota</label>
-
             <textarea
               id="noteTextInput"
               class="field"
@@ -1009,19 +1204,143 @@
     </section>
   </div>
 
+  <div id="cardModalOverlay" class="modal-overlay hidden">
+    <section class="modal">
+      <div class="modal-header">
+        <h2 id="cardModalTitle">Nueva tarjeta</h2>
+
+        <button
+          id="closeCardModalButton"
+          class="close-button"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="cardForm">
+        <input id="editingCardId" type="hidden">
+
+        <div class="form-group">
+          <label for="cardNameInput">Nombre de la tarjeta</label>
+          <input
+            id="cardNameInput"
+            class="field"
+            type="text"
+            maxlength="35"
+            placeholder="Ejemplo: Sberbank"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="cardInitialInput">Saldo inicial</label>
+          <input
+            id="cardInitialInput"
+            class="field"
+            type="number"
+            inputmode="decimal"
+            step="0.01"
+            placeholder="0,00"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="cardLast4Input">Últimos 4 dígitos</label>
+          <input
+            id="cardLast4Input"
+            class="field"
+            type="text"
+            inputmode="numeric"
+            maxlength="4"
+            placeholder="1234"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="cardColorInput">Color</label>
+          <select id="cardColorInput" class="field">
+            <option value="purple">Morado</option>
+            <option value="blue">Azul</option>
+            <option value="green">Verde</option>
+            <option value="orange">Naranja</option>
+            <option value="red">Rojo</option>
+            <option value="black">Negro</option>
+          </select>
+        </div>
+
+        <button class="save-button" type="submit">
+          Guardar tarjeta
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <div id="settingsModalOverlay" class="modal-overlay hidden">
+    <section class="modal">
+      <div class="modal-header">
+        <h2>Ajustes</h2>
+
+        <button
+          id="closeSettingsModalButton"
+          class="close-button"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label for="currencyInput">Moneda principal</label>
+        <select id="currencyInput" class="field">
+          <option value="EUR">EUR (€)</option>
+          <option value="RUB">RUB (₽)</option>
+          <option value="USD">USD ($)</option>
+          <option value="CUP">CUP</option>
+          <option value="USDT">USDT</option>
+        </select>
+      </div>
+
+      <button id="saveSettingsButton" class="save-button" type="button">
+        Guardar ajustes
+      </button>
+    </section>
+  </div>
+
   <script>
     const STORAGE_KEYS = {
-      transactions: "veiFinanceTransactions",
-      notes: "veiFinanceNotes"
+      cards: "veiFinanceCardsV2",
+      transactions: "veiFinanceTransactionsV2",
+      notes: "veiFinanceNotesV2",
+      currency: "veiFinanceCurrencyV2"
     };
 
-    let transactions =
-      JSON.parse(localStorage.getItem(STORAGE_KEYS.transactions)) || [];
+    const CARD_COLORS = {
+      purple: ["#b249f8", "#6522ca"],
+      blue: ["#4f8df7", "#1747b8"],
+      green: ["#35d07f", "#0d7b53"],
+      orange: ["#ff9d42", "#d85b18"],
+      red: ["#ff6464", "#b81944"],
+      black: ["#4e515b", "#17181d"]
+    };
 
-    let notes =
-      JSON.parse(localStorage.getItem(STORAGE_KEYS.notes)) || [];
+    let cards = JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.cards) || "[]"
+    );
 
-    let currentType = "income";
+    let transactions = JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.transactions) || "[]"
+    );
+
+    let notes = JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.notes) || "[]"
+    );
+
+    let currency =
+      localStorage.getItem(STORAGE_KEYS.currency) || "EUR";
+
+    let currentEntryType = "income";
     let showAllHomeTransactions = false;
 
     const balanceValue = document.getElementById("balanceValue");
@@ -1031,76 +1350,85 @@
     const summaryExpense = document.getElementById("summaryExpense");
     const monthResult = document.getElementById("monthResult");
     const resultCaption = document.getElementById("resultCaption");
-
     const incomeProgress = document.getElementById("incomeProgress");
     const expenseProgress = document.getElementById("expenseProgress");
     const resultProgress = document.getElementById("resultProgress");
 
-    const transactionsList =
-      document.getElementById("transactionsList");
-
+    const homeCardsList = document.getElementById("homeCardsList");
+    const cardsGrid = document.getElementById("cardsGrid");
+    const transactionsList = document.getElementById("transactionsList");
     const allTransactionsList =
       document.getElementById("allTransactionsList");
+    const notesList = document.getElementById("notesList");
 
-    const notesList =
-      document.getElementById("notesList");
+    const statsBalance = document.getElementById("statsBalance");
+    const statsCards = document.getElementById("statsCards");
+    const statsIncome = document.getElementById("statsIncome");
+    const statsExpense = document.getElementById("statsExpense");
 
-    const modalOverlay =
-      document.getElementById("modalOverlay");
-
-    const modalTitle =
-      document.getElementById("modalTitle");
-
-    const moneyFields =
-      document.getElementById("moneyFields");
-
-    const noteFields =
-      document.getElementById("noteFields");
-
-    const entryForm =
-      document.getElementById("entryForm");
-
-    const amountInput =
-      document.getElementById("amountInput");
-
-    const categoryInput =
-      document.getElementById("categoryInput");
-
+    const entryModalOverlay =
+      document.getElementById("entryModalOverlay");
+    const entryModalTitle =
+      document.getElementById("entryModalTitle");
+    const entryForm = document.getElementById("entryForm");
+    const moneyFields = document.getElementById("moneyFields");
+    const noteFields = document.getElementById("noteFields");
+    const amountInput = document.getElementById("amountInput");
+    const cardInput = document.getElementById("cardInput");
+    const categoryInput = document.getElementById("categoryInput");
     const descriptionInput =
       document.getElementById("descriptionInput");
-
-    const dateInput =
-      document.getElementById("dateInput");
-
+    const dateInput = document.getElementById("dateInput");
     const noteTitleInput =
       document.getElementById("noteTitleInput");
-
     const noteTextInput =
       document.getElementById("noteTextInput");
 
-    const statsBalance =
-      document.getElementById("statsBalance");
+    const cardModalOverlay =
+      document.getElementById("cardModalOverlay");
+    const cardModalTitle =
+      document.getElementById("cardModalTitle");
+    const cardForm = document.getElementById("cardForm");
+    const editingCardId =
+      document.getElementById("editingCardId");
+    const cardNameInput =
+      document.getElementById("cardNameInput");
+    const cardInitialInput =
+      document.getElementById("cardInitialInput");
+    const cardLast4Input =
+      document.getElementById("cardLast4Input");
+    const cardColorInput =
+      document.getElementById("cardColorInput");
 
-    const statsIncome =
-      document.getElementById("statsIncome");
+    const settingsModalOverlay =
+      document.getElementById("settingsModalOverlay");
+    const currencyInput =
+      document.getElementById("currencyInput");
 
-    const statsExpense =
-      document.getElementById("statsExpense");
+    dateInput.value = formatDateForInput(new Date());
 
-    const statsTransactions =
-      document.getElementById("statsTransactions");
+    function createId() {
+      if (window.crypto && crypto.randomUUID) {
+        return crypto.randomUUID();
+      }
 
-    const showAllButton =
-      document.getElementById("showAllButton");
-
-    const today = new Date();
-    dateInput.value = formatDateForInput(today);
+      return `${Date.now()}-${Math.random()}`;
+    }
 
     function formatMoney(value) {
+      const numericValue = Number(value) || 0;
+
+      if (currency === "CUP" || currency === "USDT") {
+        return `${new Intl.NumberFormat("es-ES", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }).format(numericValue)} ${currency}`;
+      }
+
       return new Intl.NumberFormat("es-ES", {
         style: "currency",
-        currency: "EUR"
-      }).format(value);
+        currency
+      }).format(numericValue);
     }
 
     function formatDateForInput(date) {
@@ -1121,7 +1449,18 @@
       }).format(date);
     }
 
+    function escapeHTML(text = "") {
+      const element = document.createElement("div");
+      element.textContent = text;
+      return element.innerHTML;
+    }
+
     function saveData() {
+      localStorage.setItem(
+        STORAGE_KEYS.cards,
+        JSON.stringify(cards)
+      );
+
       localStorage.setItem(
         STORAGE_KEYS.transactions,
         JSON.stringify(transactions)
@@ -1131,53 +1470,93 @@
         STORAGE_KEYS.notes,
         JSON.stringify(notes)
       );
+
+      localStorage.setItem(
+        STORAGE_KEYS.currency,
+        currency
+      );
+    }
+
+    function getCardTotals(cardId) {
+      const card = cards.find((item) => item.id === cardId);
+
+      if (!card) {
+        return {
+          income: 0,
+          expense: 0,
+          balance: 0
+        };
+      }
+
+      let income = 0;
+      let expense = 0;
+
+      transactions
+        .filter((transaction) => transaction.cardId === cardId)
+        .forEach((transaction) => {
+          const amount = Number(transaction.amount) || 0;
+
+          if (transaction.type === "income") {
+            income += amount;
+          }
+
+          if (transaction.type === "expense") {
+            expense += amount;
+          }
+        });
+
+      return {
+        income,
+        expense,
+        balance: Number(card.initialBalance || 0) + income - expense
+      };
     }
 
     function calculateTotals() {
       let totalIncome = 0;
       let totalExpense = 0;
-      let currentMonthIncome = 0;
-      let currentMonthExpense = 0;
+      let monthIncomeTotal = 0;
+      let monthExpenseTotal = 0;
 
       const now = new Date();
-      const currentMonth = now.getMonth();
-      const currentYear = now.getFullYear();
 
       transactions.forEach((transaction) => {
-        const amount = Number(transaction.amount);
+        const amount = Number(transaction.amount) || 0;
         const transactionDate =
           new Date(`${transaction.date}T12:00:00`);
+
+        const isCurrentMonth =
+          transactionDate.getMonth() === now.getMonth() &&
+          transactionDate.getFullYear() === now.getFullYear();
 
         if (transaction.type === "income") {
           totalIncome += amount;
 
-          if (
-            transactionDate.getMonth() === currentMonth &&
-            transactionDate.getFullYear() === currentYear
-          ) {
-            currentMonthIncome += amount;
+          if (isCurrentMonth) {
+            monthIncomeTotal += amount;
           }
         }
 
         if (transaction.type === "expense") {
           totalExpense += amount;
 
-          if (
-            transactionDate.getMonth() === currentMonth &&
-            transactionDate.getFullYear() === currentYear
-          ) {
-            currentMonthExpense += amount;
+          if (isCurrentMonth) {
+            monthExpenseTotal += amount;
           }
         }
       });
 
+      const cardsBalance = cards.reduce((total, card) => {
+        return total + getCardTotals(card.id).balance;
+      }, 0);
+
       return {
         totalIncome,
         totalExpense,
-        balance: totalIncome - totalExpense,
-        currentMonthIncome,
-        currentMonthExpense,
-        monthBalance: currentMonthIncome - currentMonthExpense
+        balance: cardsBalance,
+        monthIncome: monthIncomeTotal,
+        monthExpense: monthExpenseTotal,
+        monthBalance: monthIncomeTotal - monthExpenseTotal
       };
     }
 
@@ -1185,53 +1564,44 @@
       const totals = calculateTotals();
 
       balanceValue.textContent = formatMoney(totals.balance);
-      monthIncome.textContent = formatMoney(totals.currentMonthIncome);
-      monthExpense.textContent = formatMoney(totals.currentMonthExpense);
-
-      summaryIncome.textContent =
-        formatMoney(totals.currentMonthIncome);
-
-      summaryExpense.textContent =
-        formatMoney(totals.currentMonthExpense);
-
-      monthResult.textContent =
-        formatMoney(totals.monthBalance);
+      monthIncome.textContent = formatMoney(totals.monthIncome);
+      monthExpense.textContent = formatMoney(totals.monthExpense);
+      summaryIncome.textContent = formatMoney(totals.monthIncome);
+      summaryExpense.textContent = formatMoney(totals.monthExpense);
+      monthResult.textContent = formatMoney(totals.monthBalance);
 
       statsBalance.textContent = formatMoney(totals.balance);
+      statsCards.textContent = cards.length;
       statsIncome.textContent = formatMoney(totals.totalIncome);
       statsExpense.textContent = formatMoney(totals.totalExpense);
-      statsTransactions.textContent = transactions.length;
 
-      const highest =
-        Math.max(
-          totals.currentMonthIncome,
-          totals.currentMonthExpense,
-          1
-        );
+      const highest = Math.max(
+        totals.monthIncome,
+        totals.monthExpense,
+        1
+      );
 
-      const incomePercent =
-        (totals.currentMonthIncome / highest) * 100;
+      incomeProgress.style.width =
+        `${(totals.monthIncome / highest) * 100}%`;
 
-      const expensePercent =
-        (totals.currentMonthExpense / highest) * 100;
+      expenseProgress.style.width =
+        `${(totals.monthExpense / highest) * 100}%`;
 
       const resultPercent =
-        totals.currentMonthIncome > 0
+        totals.monthIncome > 0
           ? Math.min(
-              Math.abs(totals.monthBalance) /
-                totals.currentMonthIncome *
+              (Math.abs(totals.monthBalance) /
+                totals.monthIncome) *
                 100,
               100
             )
           : 0;
 
-      incomeProgress.style.width = `${incomePercent}%`;
-      expenseProgress.style.width = `${expensePercent}%`;
       resultProgress.style.width = `${resultPercent}%`;
 
       if (
-        totals.currentMonthIncome === 0 &&
-        totals.currentMonthExpense === 0
+        totals.monthIncome === 0 &&
+        totals.monthExpense === 0
       ) {
         resultCaption.textContent =
           "Todavía no hay movimientos este mes.";
@@ -1246,14 +1616,132 @@
           "Ingresos y gastos están equilibrados.";
       }
 
+      renderCards();
       renderTransactions();
       renderNotes();
+      populateCardSelector();
     }
 
-    function renderTransactions() {
-      const sortedTransactions = [...transactions].sort((a, b) => {
-        const dateA = new Date(`${a.date}T12:00:00`).getTime();
-        const dateB = new Date(`${b.date}T12:00:00`).getTime();
+    function renderCards() {
+      homeCardsList.innerHTML = "";
+      cardsGrid.innerHTML = "";
+
+      if (cards.length === 0) {
+        homeCardsList.innerHTML = `
+          <div class="empty-state">
+            Todavía no tienes tarjetas.<br>
+            Crea la primera desde la pestaña Tarjetas.
+          </div>
+        `;
+
+        cardsGrid.innerHTML = `
+          <div class="empty-state">
+            Aquí aparecerán tus tarjetas.<br>
+            Pulsa el botón + para crear la primera.
+          </div>
+        `;
+
+        return;
+      }
+
+      cards.forEach((card) => {
+        const totals = getCardTotals(card.id);
+        const colors =
+          CARD_COLORS[card.color] || CARD_COLORS.purple;
+
+        const cardStyle = `
+          --card-color-1: ${colors[0]};
+          --card-color-2: ${colors[1]};
+        `;
+
+        const walletCard = document.createElement("article");
+        walletCard.className = "wallet-card";
+        walletCard.setAttribute("style", cardStyle);
+
+        walletCard.innerHTML = `
+          <div class="wallet-card-top">
+            <div class="wallet-card-name">
+              ${escapeHTML(card.name)}
+            </div>
+
+            <div class="wallet-card-number">
+              •••• ${escapeHTML(card.last4 || "0000")}
+            </div>
+          </div>
+
+          <div class="wallet-card-balance">
+            ${formatMoney(totals.balance)}
+          </div>
+
+          <div class="wallet-card-footer">
+            <span>Ingresado ${formatMoney(totals.income)}</span>
+            <span>Gastado ${formatMoney(totals.expense)}</span>
+          </div>
+        `;
+
+        homeCardsList.appendChild(walletCard);
+
+        const detailCard = document.createElement("article");
+        detailCard.className = "card-detail";
+        detailCard.setAttribute("style", cardStyle);
+
+        detailCard.innerHTML = `
+          <div class="card-detail-header">
+            <div>
+              <div class="card-chip"></div>
+
+              <h3>${escapeHTML(card.name)}</h3>
+              <small>•••• ${escapeHTML(card.last4 || "0000")}</small>
+            </div>
+
+            <div class="card-color-dot"></div>
+          </div>
+
+          <div class="card-detail-balance">
+            ${formatMoney(totals.balance)}
+          </div>
+
+          <div class="card-stats">
+            <div class="card-stat">
+              <span>Ingresado</span>
+              <strong>${formatMoney(totals.income)}</strong>
+            </div>
+
+            <div class="card-stat">
+              <span>Gastado</span>
+              <strong>${formatMoney(totals.expense)}</strong>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button
+              class="small-button"
+              type="button"
+              data-edit-card="${card.id}"
+            >
+              Editar
+            </button>
+
+            <button
+              class="small-button danger"
+              type="button"
+              data-delete-card="${card.id}"
+            >
+              Eliminar
+            </button>
+          </div>
+        `;
+
+        cardsGrid.appendChild(detailCard);
+      });
+    }
+
+    function getSortedTransactions() {
+      return [...transactions].sort((a, b) => {
+        const dateA =
+          new Date(`${a.date}T12:00:00`).getTime();
+        const dateB =
+          new Date(`${b.date}T12:00:00`).getTime();
 
         if (dateB !== dateA) {
           return dateB - dateA;
@@ -1261,6 +1749,10 @@
 
         return b.createdAt - a.createdAt;
       });
+    }
+
+    function renderTransactions() {
+      const sortedTransactions = getSortedTransactions();
 
       const homeTransactions = showAllHomeTransactions
         ? sortedTransactions
@@ -1301,6 +1793,9 @@
 
       items.forEach((transaction) => {
         const isIncome = transaction.type === "income";
+        const card = cards.find(
+          (item) => item.id === transaction.cardId
+        );
 
         const article = document.createElement("article");
         article.className = "transaction";
@@ -1314,19 +1809,22 @@
             <div class="transaction-title">
               ${escapeHTML(
                 transaction.description ||
-                transaction.category
+                transaction.category ||
+                "Movimiento"
               )}
             </div>
 
             <div class="transaction-date">
-              ${escapeHTML(transaction.category)} ·
-              ${formatVisibleDate(transaction.date)}
+              ${escapeHTML(card ? card.name : "Sin tarjeta")}
+              · ${formatVisibleDate(transaction.date)}
             </div>
           </div>
 
           <div class="transaction-right">
             <div class="transaction-amount ${transaction.type}">
-              ${isIncome ? "+" : "−"}${formatMoney(transaction.amount)}
+              ${isIncome ? "+" : "−"}${formatMoney(
+                transaction.amount
+              )}
             </div>
 
             <button
@@ -1355,7 +1853,7 @@
         notesList.innerHTML = `
           <div class="empty-state">
             No tienes notas guardadas.<br>
-            Aquí puedes apuntar ideas, pagos pendientes o recordatorios.
+            Aquí puedes apuntar pagos, ideas o recordatorios.
           </div>
         `;
 
@@ -1397,27 +1895,72 @@
       });
     }
 
-    function openModal(type = "income") {
-      setCurrentType(type);
-      modalOverlay.classList.remove("hidden");
+    function populateCardSelector() {
+      cardInput.innerHTML = "";
+
+      if (cards.length === 0) {
+        cardInput.innerHTML = `
+          <option value="">
+            Primero crea una tarjeta
+          </option>
+        `;
+
+        return;
+      }
+
+      cards.forEach((card) => {
+        const option = document.createElement("option");
+        option.value = card.id;
+        option.textContent = card.name;
+        cardInput.appendChild(option);
+      });
+    }
+
+    function showPage(pageId) {
+      document.querySelectorAll(".page").forEach((page) => {
+        page.classList.remove("active");
+      });
+
+      document.querySelectorAll(".nav-button").forEach((button) => {
+        button.classList.toggle(
+          "active",
+          button.dataset.page === pageId
+        );
+      });
+
+      document.getElementById(pageId).classList.add("active");
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function openEntryModal(type = "income") {
+      setCurrentEntryType(type);
+      entryModalOverlay.classList.remove("hidden");
       document.body.style.overflow = "hidden";
     }
 
-    function closeModal() {
-      modalOverlay.classList.add("hidden");
+    function closeEntryModal() {
+      entryModalOverlay.classList.add("hidden");
       document.body.style.overflow = "";
-      resetForm();
+      entryForm.reset();
+      dateInput.value = formatDateForInput(new Date());
+      categoryInput.value = "Otros";
     }
 
-    function setCurrentType(type) {
-      currentType = type;
+    function setCurrentEntryType(type) {
+      currentEntryType = type;
 
-      document.querySelectorAll(".type-button").forEach((button) => {
-        button.classList.toggle(
-          "active",
-          button.dataset.type === type
-        );
-      });
+      document
+        .querySelectorAll("[data-entry-type]")
+        .forEach((button) => {
+          button.classList.toggle(
+            "active",
+            button.dataset.entryType === type
+          );
+        });
 
       const isNote = type === "note";
 
@@ -1425,78 +1968,58 @@
       noteFields.classList.toggle("hidden", !isNote);
 
       if (type === "income") {
-        modalTitle.textContent = "Añadir ingreso";
+        entryModalTitle.textContent = "Añadir ingreso";
       }
 
       if (type === "expense") {
-        modalTitle.textContent = "Añadir gasto";
+        entryModalTitle.textContent = "Añadir gasto";
       }
 
       if (type === "note") {
-        modalTitle.textContent = "Nueva nota";
+        entryModalTitle.textContent = "Nueva nota";
       }
     }
 
-    function resetForm() {
-      entryForm.reset();
-      dateInput.value = formatDateForInput(new Date());
-      categoryInput.value = "Otros";
+    function openCardModal(cardId = "") {
+      cardForm.reset();
+      editingCardId.value = "";
+      cardModalTitle.textContent = "Nueva tarjeta";
+
+      if (cardId) {
+        const card = cards.find((item) => item.id === cardId);
+
+        if (!card) {
+          return;
+        }
+
+        editingCardId.value = card.id;
+        cardNameInput.value = card.name;
+        cardInitialInput.value = card.initialBalance;
+        cardLast4Input.value = card.last4;
+        cardColorInput.value = card.color;
+        cardModalTitle.textContent = "Editar tarjeta";
+      }
+
+      cardModalOverlay.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
     }
 
-    function createTransaction() {
-      const amount = Number(amountInput.value);
-      const description = descriptionInput.value.trim();
-      const date = dateInput.value;
-
-      if (!amount || amount <= 0) {
-        alert("Escribe una cantidad válida.");
-        return false;
-      }
-
-      if (!date) {
-        alert("Selecciona una fecha.");
-        return false;
-      }
-
-      transactions.push({
-        id: crypto.randomUUID
-          ? crypto.randomUUID()
-          : String(Date.now()),
-        type: currentType,
-        amount,
-        category: categoryInput.value,
-        description,
-        date,
-        createdAt: Date.now()
-      });
-
-      return true;
+    function closeCardModal() {
+      cardModalOverlay.classList.add("hidden");
+      document.body.style.overflow = "";
+      cardForm.reset();
+      editingCardId.value = "";
     }
 
-    function createNote() {
-      const title = noteTitleInput.value.trim();
-      const text = noteTextInput.value.trim();
+    function openSettingsModal() {
+      currencyInput.value = currency;
+      settingsModalOverlay.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
 
-      if (!title) {
-        alert("Escribe un título para la nota.");
-        return false;
-      }
-
-      if (!text) {
-        alert("Escribe el contenido de la nota.");
-        return false;
-      }
-
-      notes.push({
-        id: crypto.randomUUID
-          ? crypto.randomUUID()
-          : String(Date.now()),
-        title,
-        text,
-        createdAt: Date.now()
-      });
-
-      return true;
+    function closeSettingsModal() {
+      settingsModalOverlay.classList.add("hidden");
+      document.body.style.overflow = "";
     }
 
     function deleteTransaction(id) {
@@ -1509,72 +2032,232 @@
     }
 
     function deleteNote(id) {
-      notes = notes.filter(
-        (note) => note.id !== id
-      );
-
+      notes = notes.filter((note) => note.id !== id);
       saveData();
       renderDashboard();
     }
 
-    function escapeHTML(text) {
-      const element = document.createElement("div");
-      element.textContent = text;
-      return element.innerHTML;
+    function deleteCard(id) {
+      const hasTransactions = transactions.some(
+        (transaction) => transaction.cardId === id
+      );
+
+      if (hasTransactions) {
+        alert(
+          "Esta tarjeta tiene movimientos. Elimínalos primero."
+        );
+        return;
+      }
+
+      cards = cards.filter((card) => card.id !== id);
+      saveData();
+      renderDashboard();
     }
 
+    entryForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (currentEntryType === "note") {
+        const title = noteTitleInput.value.trim();
+        const text = noteTextInput.value.trim();
+
+        if (!title || !text) {
+          alert("Completa el título y el contenido de la nota.");
+          return;
+        }
+
+        notes.push({
+          id: createId(),
+          title,
+          text,
+          createdAt: Date.now()
+        });
+      } else {
+        if (cards.length === 0) {
+          alert("Primero crea una tarjeta.");
+          return;
+        }
+
+        const amount = Number(amountInput.value);
+        const selectedCardId = cardInput.value;
+        const date = dateInput.value;
+
+        if (!amount || amount <= 0) {
+          alert("Escribe una cantidad válida.");
+          return;
+        }
+
+        if (!selectedCardId) {
+          alert("Selecciona una tarjeta.");
+          return;
+        }
+
+        if (!date) {
+          alert("Selecciona una fecha.");
+          return;
+        }
+
+        transactions.push({
+          id: createId(),
+          type: currentEntryType,
+          amount,
+          cardId: selectedCardId,
+          category: categoryInput.value,
+          description: descriptionInput.value.trim(),
+          date,
+          createdAt: Date.now()
+        });
+      }
+
+      saveData();
+      renderDashboard();
+      closeEntryModal();
+    });
+
+    cardForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const name = cardNameInput.value.trim();
+      const initialBalance =
+        Number(cardInitialInput.value) || 0;
+      const last4 = cardLast4Input.value
+        .replace(/\D/g, "")
+        .slice(0, 4);
+      const color = cardColorInput.value;
+
+      if (!name) {
+        alert("Escribe un nombre para la tarjeta.");
+        return;
+      }
+
+      if (editingCardId.value) {
+        const index = cards.findIndex(
+          (card) => card.id === editingCardId.value
+        );
+
+        if (index !== -1) {
+          cards[index] = {
+            ...cards[index],
+            name,
+            initialBalance,
+            last4,
+            color
+          };
+        }
+      } else {
+        cards.push({
+          id: createId(),
+          name,
+          initialBalance,
+          last4,
+          color,
+          createdAt: Date.now()
+        });
+      }
+
+      saveData();
+      renderDashboard();
+      closeCardModal();
+    });
+
     document
-      .querySelectorAll("[data-open-modal]")
+      .querySelectorAll("[data-open-entry]")
       .forEach((button) => {
         button.addEventListener("click", () => {
-          openModal(button.dataset.openModal);
+          openEntryModal(button.dataset.openEntry);
         });
       });
 
     document
-      .querySelectorAll(".type-button")
+      .querySelectorAll("[data-entry-type]")
       .forEach((button) => {
         button.addEventListener("click", () => {
-          setCurrentType(button.dataset.type);
+          setCurrentEntryType(button.dataset.entryType);
+        });
+      });
+
+    document
+      .querySelectorAll(".nav-button")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          showPage(button.dataset.page);
         });
       });
 
     document
       .getElementById("floatingButton")
       .addEventListener("click", () => {
-        openModal("income");
+        openEntryModal("income");
       });
 
     document
-      .getElementById("closeModalButton")
-      .addEventListener("click", closeModal);
+      .getElementById("addCardButton")
+      .addEventListener("click", () => {
+        openCardModal();
+      });
 
-    modalOverlay.addEventListener("click", (event) => {
-      if (event.target === modalOverlay) {
-        closeModal();
+    document
+      .getElementById("addNoteButton")
+      .addEventListener("click", () => {
+        openEntryModal("note");
+      });
+
+    document
+      .getElementById("showCardsButton")
+      .addEventListener("click", () => {
+        showPage("cardsPage");
+      });
+
+    document
+      .getElementById("settingsButton")
+      .addEventListener("click", openSettingsModal);
+
+    document
+      .getElementById("closeEntryModalButton")
+      .addEventListener("click", closeEntryModal);
+
+    document
+      .getElementById("closeCardModalButton")
+      .addEventListener("click", closeCardModal);
+
+    document
+      .getElementById("closeSettingsModalButton")
+      .addEventListener("click", closeSettingsModal);
+
+    document
+      .getElementById("saveSettingsButton")
+      .addEventListener("click", () => {
+        currency = currencyInput.value;
+        saveData();
+        renderDashboard();
+        closeSettingsModal();
+      });
+
+    document
+      .getElementById("showAllButton")
+      .addEventListener("click", () => {
+        showAllHomeTransactions =
+          !showAllHomeTransactions;
+
+        renderTransactions();
+      });
+
+    entryModalOverlay.addEventListener("click", (event) => {
+      if (event.target === entryModalOverlay) {
+        closeEntryModal();
       }
     });
 
-    entryForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      const success =
-        currentType === "note"
-          ? createNote()
-          : createTransaction();
-
-      if (!success) {
-        return;
+    cardModalOverlay.addEventListener("click", (event) => {
+      if (event.target === cardModalOverlay) {
+        closeCardModal();
       }
-
-      saveData();
-      renderDashboard();
-      closeModal();
     });
 
-    showAllButton.addEventListener("click", () => {
-      showAllHomeTransactions = !showAllHomeTransactions;
-      renderTransactions();
+    settingsModalOverlay.addEventListener("click", (event) => {
+      if (event.target === settingsModalOverlay) {
+        closeSettingsModal();
+      }
     });
 
     document.addEventListener("click", (event) => {
@@ -1584,11 +2267,14 @@
       const noteButton =
         event.target.closest("[data-delete-note]");
 
-      if (transactionButton) {
-        const confirmed =
-          confirm("¿Eliminar este movimiento?");
+      const editCardButton =
+        event.target.closest("[data-edit-card]");
 
-        if (confirmed) {
+      const deleteCardButton =
+        event.target.closest("[data-delete-card]");
+
+      if (transactionButton) {
+        if (confirm("¿Eliminar este movimiento?")) {
           deleteTransaction(
             transactionButton.dataset.deleteTransaction
           );
@@ -1596,43 +2282,21 @@
       }
 
       if (noteButton) {
-        const confirmed =
-          confirm("¿Eliminar esta nota?");
-
-        if (confirmed) {
+        if (confirm("¿Eliminar esta nota?")) {
           deleteNote(noteButton.dataset.deleteNote);
         }
       }
+
+      if (editCardButton) {
+        openCardModal(editCardButton.dataset.editCard);
+      }
+
+      if (deleteCardButton) {
+        if (confirm("¿Eliminar esta tarjeta?")) {
+          deleteCard(deleteCardButton.dataset.deleteCard);
+        }
+      }
     });
-
-    document
-      .querySelectorAll(".nav-button")
-      .forEach((button) => {
-        button.addEventListener("click", () => {
-          document
-            .querySelectorAll(".nav-button")
-            .forEach((item) => {
-              item.classList.remove("active");
-            });
-
-          document
-            .querySelectorAll(".page")
-            .forEach((page) => {
-              page.classList.remove("active");
-            });
-
-          button.classList.add("active");
-
-          document
-            .getElementById(button.dataset.page)
-            .classList.add("active");
-
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-          });
-        });
-      });
 
     renderDashboard();
   </script>
