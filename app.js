@@ -1,5 +1,5 @@
 (() => {
-  const files = ["app-core.js", "app-render.js", "app-events.js"];
+  const files = ["app-core.js", "app-render.js", "app-actions.js", "app-events.js"];
 
   const loadNext = (index = 0) => {
     if (index >= files.length) return;
