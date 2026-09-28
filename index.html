@@ -4,842 +4,18 @@
   <meta charset="UTF-8">
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
-  <meta name="theme-color" content="#0b0c10">
+  <meta name="theme-color" content="#090a0e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Vei Finance">
 
   <title>Vei Finance</title>
 
-  <style>
-    :root {
-      --background: #0b0c10;
-      --surface: #15171d;
-      --surface-light: #1c1f27;
-      --surface-soft: #22252d;
-      --text: #f7f7fa;
-      --text-secondary: #9296a2;
-      --text-soft: #666b78;
-      --accent: #a855f7;
-      --accent-dark: #7c3aed;
-      --accent-soft: rgba(168, 85, 247, 0.15);
-      --income: #35d07f;
-      --income-soft: rgba(53, 208, 127, 0.14);
-      --expense: #ff6464;
-      --expense-soft: rgba(255, 100, 100, 0.14);
-      --border: rgba(255, 255, 255, 0.07);
-      --shadow: 0 18px 45px rgba(0, 0, 0, 0.3);
-    }
+  <script src="https://unpkg.com/lucide@1.48.0/dist/umd/lucide.min.js"></script>
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html {
-      background: var(--background);
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(
-          circle at top right,
-          rgba(168, 85, 247, 0.13),
-          transparent 30%
-        ),
-        var(--background);
-      color: var(--text);
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "Segoe UI",
-        sans-serif;
-    }
-
-    button,
-    input,
-    select,
-    textarea {
-      font: inherit;
-    }
-
-    button {
-      border: 0;
-      cursor: pointer;
-    }
-
-    input,
-    select,
-    textarea {
-      outline: none;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 520px;
-      min-height: 100vh;
-      margin: 0 auto;
-      padding:
-        calc(env(safe-area-inset-top) + 20px)
-        18px
-        calc(env(safe-area-inset-bottom) + 118px);
-    }
-
-    .page {
-      display: none;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-    }
-
-    .welcome {
-      color: var(--text-secondary);
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    .topbar h1,
-    .page-title {
-      margin: 0;
-      font-size: 27px;
-      letter-spacing: -0.8px;
-    }
-
-    .settings-button,
-    .icon-button {
-      width: 46px;
-      height: 46px;
-      border-radius: 16px;
-      background: var(--surface);
-      color: var(--text);
-      border: 1px solid var(--border);
-      font-size: 20px;
-      display: grid;
-      place-items: center;
-    }
-
-    .balance-card {
-      position: relative;
-      overflow: hidden;
-      padding: 25px;
-      border-radius: 28px;
-      background:
-        radial-gradient(
-          circle at top right,
-          rgba(255, 255, 255, 0.26),
-          transparent 34%
-        ),
-        linear-gradient(135deg, #b249f8 0%, #8528df 48%, #6522ca 100%);
-      box-shadow: 0 22px 55px rgba(124, 58, 237, 0.26);
-    }
-
-    .balance-card::after {
-      content: "";
-      position: absolute;
-      width: 170px;
-      height: 170px;
-      right: -80px;
-      bottom: -105px;
-      border: 25px solid rgba(255, 255, 255, 0.08);
-      border-radius: 50%;
-    }
-
-    .balance-label {
-      position: relative;
-      z-index: 1;
-      color: rgba(255, 255, 255, 0.74);
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .balance-value {
-      position: relative;
-      z-index: 1;
-      margin: 0 0 24px;
-      font-size: 40px;
-      line-height: 1;
-      letter-spacing: -1.7px;
-    }
-
-    .balance-info {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 11px;
-    }
-
-    .balance-item {
-      padding: 13px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.13);
-      backdrop-filter: blur(12px);
-    }
-
-    .balance-item span {
-      display: block;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 12px;
-      margin-bottom: 5px;
-    }
-
-    .balance-item strong {
-      display: block;
-      font-size: 16px;
-      letter-spacing: -0.2px;
-    }
-
-    .quick-actions {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 11px;
-      margin: 18px 0 26px;
-    }
-
-    .quick-button {
-      min-height: 84px;
-      border-radius: 22px;
-      background: var(--surface);
-      color: var(--text);
-      border: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-    }
-
-    .quick-icon {
-      width: 35px;
-      height: 35px;
-      display: grid;
-      place-items: center;
-      border-radius: 13px;
-      font-size: 19px;
-      font-weight: 700;
-    }
-
-    .quick-button.income .quick-icon {
-      color: var(--income);
-      background: var(--income-soft);
-    }
-
-    .quick-button.expense .quick-icon {
-      color: var(--expense);
-      background: var(--expense-soft);
-    }
-
-    .quick-button.note .quick-icon {
-      color: var(--accent);
-      background: var(--accent-soft);
-    }
-
-    .quick-button span:last-child {
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .section {
-      margin-top: 26px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-
-    .section-header h2 {
-      margin: 0;
-      font-size: 19px;
-      letter-spacing: -0.4px;
-    }
-
-    .link-button {
-      padding: 0;
-      background: transparent;
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .cards-scroll {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding: 2px 2px 6px;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-    }
-
-    .cards-scroll::-webkit-scrollbar {
-      display: none;
-    }
-
-    .wallet-card {
-      position: relative;
-      min-width: 265px;
-      height: 154px;
-      overflow: hidden;
-      padding: 19px;
-      border-radius: 25px;
-      color: #fff;
-      scroll-snap-align: start;
-      background: linear-gradient(135deg, var(--card-color-1), var(--card-color-2));
-      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.25);
-    }
-
-    .wallet-card::after {
-      content: "";
-      position: absolute;
-      width: 130px;
-      height: 130px;
-      right: -62px;
-      bottom: -84px;
-      border: 23px solid rgba(255, 255, 255, 0.09);
-      border-radius: 50%;
-    }
-
-    .wallet-card-top,
-    .wallet-card-balance,
-    .wallet-card-footer {
-      position: relative;
-      z-index: 1;
-    }
-
-    .wallet-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .wallet-card-name {
-      min-width: 0;
-      font-weight: 750;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .wallet-card-number {
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .wallet-card-balance {
-      margin-top: 29px;
-      font-size: 29px;
-      font-weight: 800;
-      letter-spacing: -1px;
-    }
-
-    .wallet-card-footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 8px;
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 12px;
-    }
-
-    .cards-grid {
-      display: grid;
-      gap: 13px;
-    }
-
-    .card-detail {
-      padding: 17px;
-      border-radius: 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-    }
-
-    .card-detail-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .card-chip {
-      width: 42px;
-      height: 29px;
-      margin-bottom: 12px;
-      border-radius: 9px;
-      background:
-        linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.85),
-          rgba(255, 255, 255, 0.35)
-        );
-    }
-
-    .card-detail h3 {
-      margin: 0 0 4px;
-      font-size: 17px;
-    }
-
-    .card-detail small {
-      color: var(--text-secondary);
-    }
-
-    .card-color-dot {
-      width: 18px;
-      height: 18px;
-      flex: 0 0 auto;
-      border-radius: 50%;
-      background: var(--card-color-1);
-      box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.04);
-    }
-
-    .card-detail-balance {
-      margin: 20px 0 12px;
-      font-size: 29px;
-      font-weight: 800;
-      letter-spacing: -1px;
-    }
-
-    .card-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-    }
-
-    .card-stat {
-      padding: 11px;
-      border-radius: 15px;
-      background: var(--surface-light);
-    }
-
-    .card-stat span {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--text-secondary);
-      font-size: 11px;
-    }
-
-    .card-stat strong {
-      font-size: 13px;
-    }
-
-    .card-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-      margin-top: 12px;
-    }
-
-    .small-button {
-      min-height: 43px;
-      border-radius: 14px;
-      background: var(--surface-light);
-      color: var(--text);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .small-button.danger {
-      color: var(--expense);
-    }
-
-    .summary-grid,
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .summary-card,
-    .stat-card {
-      min-height: 120px;
-      padding: 18px;
-      border-radius: 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-    }
-
-    .summary-card.large {
-      grid-column: 1 / -1;
-      min-height: 136px;
-    }
-
-    .summary-label,
-    .stat-card span {
-      color: var(--text-secondary);
-      font-size: 13px;
-      margin-bottom: 9px;
-    }
-
-    .summary-number,
-    .stat-card strong {
-      display: block;
-      font-size: 24px;
-      letter-spacing: -0.8px;
-      margin-bottom: 14px;
-    }
-
-    .progress {
-      width: 100%;
-      height: 7px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: var(--surface-soft);
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--accent), #d26aff);
-      transition: width 0.3s ease;
-    }
-
-    .summary-caption {
-      display: block;
-      color: var(--text-soft);
-      font-size: 12px;
-      margin-top: 10px;
-    }
-
-    .transactions-list,
-    .notes-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .transaction {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      padding: 14px;
-      border-radius: 21px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-    }
-
-    .transaction-icon {
-      flex: 0 0 auto;
-      width: 43px;
-      height: 43px;
-      border-radius: 15px;
-      display: grid;
-      place-items: center;
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .transaction-icon.income {
-      color: var(--income);
-      background: var(--income-soft);
-    }
-
-    .transaction-icon.expense {
-      color: var(--expense);
-      background: var(--expense-soft);
-    }
-
-    .transaction-data {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .transaction-title {
-      font-size: 14px;
-      font-weight: 650;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 4px;
-    }
-
-    .transaction-date {
-      color: var(--text-secondary);
-      font-size: 12px;
-    }
-
-    .transaction-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .transaction-amount {
-      font-size: 14px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .transaction-amount.income {
-      color: var(--income);
-    }
-
-    .transaction-amount.expense {
-      color: var(--expense);
-    }
-
-    .delete-button {
-      width: 31px;
-      height: 31px;
-      border-radius: 11px;
-      color: var(--text-secondary);
-      background: var(--surface-light);
-      display: grid;
-      place-items: center;
-      font-size: 15px;
-    }
-
-    .note-card {
-      position: relative;
-      padding: 17px 46px 17px 17px;
-      border-radius: 21px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-    }
-
-    .note-title {
-      margin: 0 0 7px;
-      font-size: 15px;
-    }
-
-    .note-text {
-      margin: 0;
-      color: var(--text-secondary);
-      font-size: 13px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-    }
-
-    .note-date {
-      margin-top: 10px;
-      color: var(--text-soft);
-      font-size: 11px;
-    }
-
-    .note-card .delete-button {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-    }
-
-    .empty-state {
-      padding: 28px 18px;
-      border-radius: 22px;
-      background: var(--surface);
-      border: 1px dashed var(--border);
-      color: var(--text-secondary);
-      text-align: center;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      z-index: 20;
-      left: 50%;
-      bottom: calc(env(safe-area-inset-bottom) + 12px);
-      transform: translateX(-50%);
-      width: calc(100% - 28px);
-      max-width: 490px;
-      padding: 8px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-radius: 25px;
-      background: rgba(24, 26, 33, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(24px);
-      box-shadow: var(--shadow);
-    }
-
-    .nav-button {
-      min-height: 58px;
-      border-radius: 18px;
-      background: transparent;
-      color: var(--text-secondary);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      font-size: 10px;
-      font-weight: 650;
-    }
-
-    .nav-button strong {
-      font-size: 18px;
-      line-height: 1;
-    }
-
-    .nav-button.active {
-      color: var(--text);
-      background: var(--surface-light);
-    }
-
-    .floating-button {
-      position: fixed;
-      z-index: 22;
-      right: max(22px, calc((100vw - 520px) / 2 + 22px));
-      bottom: calc(env(safe-area-inset-bottom) + 89px);
-      width: 61px;
-      height: 61px;
-      border-radius: 21px;
-      color: white;
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-      box-shadow: 0 16px 35px rgba(124, 58, 237, 0.38);
-      font-size: 31px;
-      font-weight: 300;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      z-index: 100;
-      inset: 0;
-      padding:
-        calc(env(safe-area-inset-top) + 20px)
-        16px
-        calc(env(safe-area-inset-bottom) + 18px);
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.67);
-      backdrop-filter: blur(7px);
-    }
-
-    .modal {
-      width: 100%;
-      max-width: 500px;
-      max-height: 92vh;
-      overflow-y: auto;
-      padding: 22px;
-      border-radius: 30px;
-      background: #17191f;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      animation: modalIn 0.22s ease;
-    }
-
-    @keyframes modalIn {
-      from {
-        transform: translateY(28px);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 22px;
-    }
-
-    .modal-header h2 {
-      margin: 0;
-      font-size: 21px;
-      letter-spacing: -0.5px;
-    }
-
-    .close-button {
-      width: 37px;
-      height: 37px;
-      border-radius: 13px;
-      color: var(--text);
-      background: var(--surface-light);
-      font-size: 20px;
-    }
-
-    .type-selector {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .type-button {
-      min-height: 46px;
-      border-radius: 15px;
-      color: var(--text-secondary);
-      background: var(--surface-light);
-      font-size: 13px;
-      font-weight: 650;
-    }
-
-    .type-button.active {
-      color: white;
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      color: var(--text-secondary);
-      font-size: 12px;
-      margin: 0 0 8px 3px;
-    }
-
-    .field {
-      width: 100%;
-      min-height: 52px;
-      padding: 0 15px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      color: var(--text);
-      background: var(--surface-light);
-    }
-
-    textarea.field {
-      min-height: 105px;
-      padding-top: 14px;
-      resize: none;
-      line-height: 1.5;
-    }
-
-    .save-button {
-      width: 100%;
-      min-height: 54px;
-      margin-top: 8px;
-      border-radius: 18px;
-      color: white;
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-      font-size: 15px;
-      font-weight: 700;
-      box-shadow: 0 14px 30px rgba(124, 58, 237, 0.24);
-    }
-
-    @media (min-width: 700px) {
-      .floating-button {
-        right: calc((100vw - 520px) / 2 + 18px);
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -847,7 +23,7 @@
 
     <section id="homePage" class="page active">
       <header class="topbar">
-        <div>
+        <div class="topbar-copy">
           <div class="welcome">Control de finanzas</div>
           <h1>Hola, Cris</h1>
         </div>
@@ -858,7 +34,7 @@
           type="button"
           aria-label="Ajustes"
         >
-          ⚙
+          <i data-lucide="settings"></i>
         </button>
       </header>
 
@@ -885,8 +61,10 @@
           type="button"
           data-open-entry="income"
         >
-          <span class="quick-icon">+</span>
-          <span>Ingreso</span>
+          <span class="quick-icon">
+            <i data-lucide="arrow-down-left"></i>
+          </span>
+          <span class="quick-label">Ingreso</span>
         </button>
 
         <button
@@ -894,8 +72,10 @@
           type="button"
           data-open-entry="expense"
         >
-          <span class="quick-icon">−</span>
-          <span>Gasto</span>
+          <span class="quick-icon">
+            <i data-lucide="arrow-up-right"></i>
+          </span>
+          <span class="quick-label">Gasto</span>
         </button>
 
         <button
@@ -903,14 +83,17 @@
           type="button"
           data-open-entry="note"
         >
-          <span class="quick-icon">✎</span>
-          <span>Nota</span>
+          <span class="quick-icon">
+            <i data-lucide="notebook-pen"></i>
+          </span>
+          <span class="quick-label">Nota</span>
         </button>
       </div>
 
       <section class="section">
         <div class="section-header">
           <h2>Mis tarjetas</h2>
+
           <button
             id="showCardsButton"
             class="link-button"
@@ -965,7 +148,12 @@
       <section class="section">
         <div class="section-header">
           <h2>Últimos movimientos</h2>
-          <button id="showAllButton" class="link-button" type="button">
+
+          <button
+            id="showAllButton"
+            class="link-button"
+            type="button"
+          >
             Ver todos
           </button>
         </div>
@@ -976,7 +164,7 @@
 
     <section id="cardsPage" class="page">
       <header class="topbar">
-        <div>
+        <div class="topbar-copy">
           <div class="welcome">Organiza tu dinero</div>
           <h1 class="page-title">Tarjetas</h1>
         </div>
@@ -987,7 +175,7 @@
           type="button"
           aria-label="Añadir tarjeta"
         >
-          +
+          <i data-lucide="plus"></i>
         </button>
       </header>
 
@@ -995,25 +183,42 @@
     </section>
 
     <section id="statsPage" class="page">
-      <h1 class="page-title">Estadísticas</h1>
+      <header class="topbar">
+        <div class="topbar-copy">
+          <div class="welcome">Tu panorama financiero</div>
+          <h1 class="page-title">Estadísticas</h1>
+        </div>
+      </header>
 
-      <div class="stats-grid section">
+      <div class="stats-grid">
         <article class="stat-card">
+          <div class="stat-icon">
+            <i data-lucide="wallet-cards"></i>
+          </div>
           <span>Saldo total</span>
           <strong id="statsBalance">0,00 €</strong>
         </article>
 
         <article class="stat-card">
+          <div class="stat-icon">
+            <i data-lucide="credit-card"></i>
+          </div>
           <span>Tarjetas</span>
           <strong id="statsCards">0</strong>
         </article>
 
         <article class="stat-card">
+          <div class="stat-icon income">
+            <i data-lucide="trending-up"></i>
+          </div>
           <span>Total ingresos</span>
           <strong id="statsIncome">0,00 €</strong>
         </article>
 
         <article class="stat-card">
+          <div class="stat-icon expense">
+            <i data-lucide="trending-down"></i>
+          </div>
           <span>Total gastos</span>
           <strong id="statsExpense">0,00 €</strong>
         </article>
@@ -1030,7 +235,7 @@
 
     <section id="notesPage" class="page">
       <header class="topbar">
-        <div>
+        <div class="topbar-copy">
           <div class="welcome">Apuntes y recordatorios</div>
           <h1 class="page-title">Notas</h1>
         </div>
@@ -1041,7 +246,7 @@
           type="button"
           aria-label="Añadir nota"
         >
-          +
+          <i data-lucide="plus"></i>
         </button>
       </header>
 
@@ -1053,35 +258,65 @@
     id="floatingButton"
     class="floating-button"
     type="button"
-    aria-label="Añadir"
+    aria-label="Añadir movimiento"
   >
-    +
+    <i data-lucide="plus"></i>
   </button>
 
-  <nav class="bottom-nav">
-    <button class="nav-button active" type="button" data-page="homePage">
-      <strong>⌂</strong>
+  <nav class="bottom-nav" aria-label="Navegación principal">
+    <button
+      class="nav-button active"
+      type="button"
+      data-page="homePage"
+      aria-label="Inicio"
+    >
+      <span class="nav-icon">
+        <i data-lucide="house"></i>
+      </span>
       <span>Inicio</span>
     </button>
 
-    <button class="nav-button" type="button" data-page="cardsPage">
-      <strong>▣</strong>
+    <button
+      class="nav-button"
+      type="button"
+      data-page="cardsPage"
+      aria-label="Tarjetas"
+    >
+      <span class="nav-icon">
+        <i data-lucide="credit-card"></i>
+      </span>
       <span>Tarjetas</span>
     </button>
 
-    <button class="nav-button" type="button" data-page="statsPage">
-      <strong>◔</strong>
+    <button
+      class="nav-button"
+      type="button"
+      data-page="statsPage"
+      aria-label="Estadísticas"
+    >
+      <span class="nav-icon">
+        <i data-lucide="chart-no-axes-column-increasing"></i>
+      </span>
       <span>Estadísticas</span>
     </button>
 
-    <button class="nav-button" type="button" data-page="notesPage">
-      <strong>✎</strong>
+    <button
+      class="nav-button"
+      type="button"
+      data-page="notesPage"
+      aria-label="Notas"
+    >
+      <span class="nav-icon">
+        <i data-lucide="notebook-tabs"></i>
+      </span>
       <span>Notas</span>
     </button>
   </nav>
 
   <div id="entryModalOverlay" class="modal-overlay hidden">
-    <section class="modal">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="entryModalTitle">
+      <div class="sheet-handle"></div>
+
       <div class="modal-header">
         <h2 id="entryModalTitle">Nuevo movimiento</h2>
 
@@ -1091,7 +326,7 @@
           type="button"
           aria-label="Cerrar"
         >
-          ×
+          <i data-lucide="x"></i>
         </button>
       </div>
 
@@ -1170,7 +405,11 @@
 
           <div class="form-group">
             <label for="dateInput">Fecha</label>
-            <input id="dateInput" class="field" type="date">
+            <input
+              id="dateInput"
+              class="field"
+              type="date"
+            >
           </div>
         </div>
 
@@ -1205,7 +444,9 @@
   </div>
 
   <div id="cardModalOverlay" class="modal-overlay hidden">
-    <section class="modal">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="cardModalTitle">
+      <div class="sheet-handle"></div>
+
       <div class="modal-header">
         <h2 id="cardModalTitle">Nueva tarjeta</h2>
 
@@ -1215,7 +456,7 @@
           type="button"
           aria-label="Cerrar"
         >
-          ×
+          <i data-lucide="x"></i>
         </button>
       </div>
 
@@ -1277,9 +518,11 @@
   </div>
 
   <div id="settingsModalOverlay" class="modal-overlay hidden">
-    <section class="modal">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+      <div class="sheet-handle"></div>
+
       <div class="modal-header">
-        <h2>Ajustes</h2>
+        <h2 id="settingsModalTitle">Ajustes</h2>
 
         <button
           id="closeSettingsModalButton"
@@ -1287,12 +530,25 @@
           type="button"
           aria-label="Cerrar"
         >
-          ×
+          <i data-lucide="x"></i>
         </button>
       </div>
 
+      <div class="settings-row">
+        <div class="settings-row-icon">
+          <i data-lucide="badge-dollar-sign"></i>
+        </div>
+
+        <div class="settings-row-copy">
+          <div class="settings-row-title">Moneda principal</div>
+          <div class="settings-row-subtitle">
+            Se utilizará en saldos, estadísticas y movimientos.
+          </div>
+        </div>
+      </div>
+
       <div class="form-group">
-        <label for="currencyInput">Moneda principal</label>
+        <label for="currencyInput">Selecciona una moneda</label>
         <select id="currencyInput" class="field">
           <option value="EUR">EUR (€)</option>
           <option value="RUB">RUB (₽)</option>
@@ -1302,1003 +558,16 @@
         </select>
       </div>
 
-      <button id="saveSettingsButton" class="save-button" type="button">
+      <button
+        id="saveSettingsButton"
+        class="save-button"
+        type="button"
+      >
         Guardar ajustes
       </button>
     </section>
   </div>
 
-  <script>
-    const STORAGE_KEYS = {
-      cards: "veiFinanceCardsV2",
-      transactions: "veiFinanceTransactionsV2",
-      notes: "veiFinanceNotesV2",
-      currency: "veiFinanceCurrencyV2"
-    };
-
-    const CARD_COLORS = {
-      purple: ["#b249f8", "#6522ca"],
-      blue: ["#4f8df7", "#1747b8"],
-      green: ["#35d07f", "#0d7b53"],
-      orange: ["#ff9d42", "#d85b18"],
-      red: ["#ff6464", "#b81944"],
-      black: ["#4e515b", "#17181d"]
-    };
-
-    let cards = JSON.parse(
-      localStorage.getItem(STORAGE_KEYS.cards) || "[]"
-    );
-
-    let transactions = JSON.parse(
-      localStorage.getItem(STORAGE_KEYS.transactions) || "[]"
-    );
-
-    let notes = JSON.parse(
-      localStorage.getItem(STORAGE_KEYS.notes) || "[]"
-    );
-
-    let currency =
-      localStorage.getItem(STORAGE_KEYS.currency) || "EUR";
-
-    let currentEntryType = "income";
-    let showAllHomeTransactions = false;
-
-    const balanceValue = document.getElementById("balanceValue");
-    const monthIncome = document.getElementById("monthIncome");
-    const monthExpense = document.getElementById("monthExpense");
-    const summaryIncome = document.getElementById("summaryIncome");
-    const summaryExpense = document.getElementById("summaryExpense");
-    const monthResult = document.getElementById("monthResult");
-    const resultCaption = document.getElementById("resultCaption");
-    const incomeProgress = document.getElementById("incomeProgress");
-    const expenseProgress = document.getElementById("expenseProgress");
-    const resultProgress = document.getElementById("resultProgress");
-
-    const homeCardsList = document.getElementById("homeCardsList");
-    const cardsGrid = document.getElementById("cardsGrid");
-    const transactionsList = document.getElementById("transactionsList");
-    const allTransactionsList =
-      document.getElementById("allTransactionsList");
-    const notesList = document.getElementById("notesList");
-
-    const statsBalance = document.getElementById("statsBalance");
-    const statsCards = document.getElementById("statsCards");
-    const statsIncome = document.getElementById("statsIncome");
-    const statsExpense = document.getElementById("statsExpense");
-
-    const entryModalOverlay =
-      document.getElementById("entryModalOverlay");
-    const entryModalTitle =
-      document.getElementById("entryModalTitle");
-    const entryForm = document.getElementById("entryForm");
-    const moneyFields = document.getElementById("moneyFields");
-    const noteFields = document.getElementById("noteFields");
-    const amountInput = document.getElementById("amountInput");
-    const cardInput = document.getElementById("cardInput");
-    const categoryInput = document.getElementById("categoryInput");
-    const descriptionInput =
-      document.getElementById("descriptionInput");
-    const dateInput = document.getElementById("dateInput");
-    const noteTitleInput =
-      document.getElementById("noteTitleInput");
-    const noteTextInput =
-      document.getElementById("noteTextInput");
-
-    const cardModalOverlay =
-      document.getElementById("cardModalOverlay");
-    const cardModalTitle =
-      document.getElementById("cardModalTitle");
-    const cardForm = document.getElementById("cardForm");
-    const editingCardId =
-      document.getElementById("editingCardId");
-    const cardNameInput =
-      document.getElementById("cardNameInput");
-    const cardInitialInput =
-      document.getElementById("cardInitialInput");
-    const cardLast4Input =
-      document.getElementById("cardLast4Input");
-    const cardColorInput =
-      document.getElementById("cardColorInput");
-
-    const settingsModalOverlay =
-      document.getElementById("settingsModalOverlay");
-    const currencyInput =
-      document.getElementById("currencyInput");
-
-    dateInput.value = formatDateForInput(new Date());
-
-    function createId() {
-      if (window.crypto && crypto.randomUUID) {
-        return crypto.randomUUID();
-      }
-
-      return `${Date.now()}-${Math.random()}`;
-    }
-
-    function formatMoney(value) {
-      const numericValue = Number(value) || 0;
-
-      if (currency === "CUP" || currency === "USDT") {
-        return `${new Intl.NumberFormat("es-ES", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }).format(numericValue)} ${currency}`;
-      }
-
-      return new Intl.NumberFormat("es-ES", {
-        style: "currency",
-        currency
-      }).format(numericValue);
-    }
-
-    function formatDateForInput(date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-
-      return `${year}-${month}-${day}`;
-    }
-
-    function formatVisibleDate(dateString) {
-      const date = new Date(`${dateString}T12:00:00`);
-
-      return new Intl.DateTimeFormat("es-ES", {
-        day: "numeric",
-        month: "short",
-        year: "numeric"
-      }).format(date);
-    }
-
-    function escapeHTML(text = "") {
-      const element = document.createElement("div");
-      element.textContent = text;
-      return element.innerHTML;
-    }
-
-    function saveData() {
-      localStorage.setItem(
-        STORAGE_KEYS.cards,
-        JSON.stringify(cards)
-      );
-
-      localStorage.setItem(
-        STORAGE_KEYS.transactions,
-        JSON.stringify(transactions)
-      );
-
-      localStorage.setItem(
-        STORAGE_KEYS.notes,
-        JSON.stringify(notes)
-      );
-
-      localStorage.setItem(
-        STORAGE_KEYS.currency,
-        currency
-      );
-    }
-
-    function getCardTotals(cardId) {
-      const card = cards.find((item) => item.id === cardId);
-
-      if (!card) {
-        return {
-          income: 0,
-          expense: 0,
-          balance: 0
-        };
-      }
-
-      let income = 0;
-      let expense = 0;
-
-      transactions
-        .filter((transaction) => transaction.cardId === cardId)
-        .forEach((transaction) => {
-          const amount = Number(transaction.amount) || 0;
-
-          if (transaction.type === "income") {
-            income += amount;
-          }
-
-          if (transaction.type === "expense") {
-            expense += amount;
-          }
-        });
-
-      return {
-        income,
-        expense,
-        balance: Number(card.initialBalance || 0) + income - expense
-      };
-    }
-
-    function calculateTotals() {
-      let totalIncome = 0;
-      let totalExpense = 0;
-      let monthIncomeTotal = 0;
-      let monthExpenseTotal = 0;
-
-      const now = new Date();
-
-      transactions.forEach((transaction) => {
-        const amount = Number(transaction.amount) || 0;
-        const transactionDate =
-          new Date(`${transaction.date}T12:00:00`);
-
-        const isCurrentMonth =
-          transactionDate.getMonth() === now.getMonth() &&
-          transactionDate.getFullYear() === now.getFullYear();
-
-        if (transaction.type === "income") {
-          totalIncome += amount;
-
-          if (isCurrentMonth) {
-            monthIncomeTotal += amount;
-          }
-        }
-
-        if (transaction.type === "expense") {
-          totalExpense += amount;
-
-          if (isCurrentMonth) {
-            monthExpenseTotal += amount;
-          }
-        }
-      });
-
-      const cardsBalance = cards.reduce((total, card) => {
-        return total + getCardTotals(card.id).balance;
-      }, 0);
-
-      return {
-        totalIncome,
-        totalExpense,
-        balance: cardsBalance,
-        monthIncome: monthIncomeTotal,
-        monthExpense: monthExpenseTotal,
-        monthBalance: monthIncomeTotal - monthExpenseTotal
-      };
-    }
-
-    function renderDashboard() {
-      const totals = calculateTotals();
-
-      balanceValue.textContent = formatMoney(totals.balance);
-      monthIncome.textContent = formatMoney(totals.monthIncome);
-      monthExpense.textContent = formatMoney(totals.monthExpense);
-      summaryIncome.textContent = formatMoney(totals.monthIncome);
-      summaryExpense.textContent = formatMoney(totals.monthExpense);
-      monthResult.textContent = formatMoney(totals.monthBalance);
-
-      statsBalance.textContent = formatMoney(totals.balance);
-      statsCards.textContent = cards.length;
-      statsIncome.textContent = formatMoney(totals.totalIncome);
-      statsExpense.textContent = formatMoney(totals.totalExpense);
-
-      const highest = Math.max(
-        totals.monthIncome,
-        totals.monthExpense,
-        1
-      );
-
-      incomeProgress.style.width =
-        `${(totals.monthIncome / highest) * 100}%`;
-
-      expenseProgress.style.width =
-        `${(totals.monthExpense / highest) * 100}%`;
-
-      const resultPercent =
-        totals.monthIncome > 0
-          ? Math.min(
-              (Math.abs(totals.monthBalance) /
-                totals.monthIncome) *
-                100,
-              100
-            )
-          : 0;
-
-      resultProgress.style.width = `${resultPercent}%`;
-
-      if (
-        totals.monthIncome === 0 &&
-        totals.monthExpense === 0
-      ) {
-        resultCaption.textContent =
-          "Todavía no hay movimientos este mes.";
-      } else if (totals.monthBalance > 0) {
-        resultCaption.textContent =
-          "Este mes vas con balance positivo.";
-      } else if (totals.monthBalance < 0) {
-        resultCaption.textContent =
-          "Este mes has gastado más de lo ingresado.";
-      } else {
-        resultCaption.textContent =
-          "Ingresos y gastos están equilibrados.";
-      }
-
-      renderCards();
-      renderTransactions();
-      renderNotes();
-      populateCardSelector();
-    }
-
-    function renderCards() {
-      homeCardsList.innerHTML = "";
-      cardsGrid.innerHTML = "";
-
-      if (cards.length === 0) {
-        homeCardsList.innerHTML = `
-          <div class="empty-state">
-            Todavía no tienes tarjetas.<br>
-            Crea la primera desde la pestaña Tarjetas.
-          </div>
-        `;
-
-        cardsGrid.innerHTML = `
-          <div class="empty-state">
-            Aquí aparecerán tus tarjetas.<br>
-            Pulsa el botón + para crear la primera.
-          </div>
-        `;
-
-        return;
-      }
-
-      cards.forEach((card) => {
-        const totals = getCardTotals(card.id);
-        const colors =
-          CARD_COLORS[card.color] || CARD_COLORS.purple;
-
-        const cardStyle = `
-          --card-color-1: ${colors[0]};
-          --card-color-2: ${colors[1]};
-        `;
-
-        const walletCard = document.createElement("article");
-        walletCard.className = "wallet-card";
-        walletCard.setAttribute("style", cardStyle);
-
-        walletCard.innerHTML = `
-          <div class="wallet-card-top">
-            <div class="wallet-card-name">
-              ${escapeHTML(card.name)}
-            </div>
-
-            <div class="wallet-card-number">
-              •••• ${escapeHTML(card.last4 || "0000")}
-            </div>
-          </div>
-
-          <div class="wallet-card-balance">
-            ${formatMoney(totals.balance)}
-          </div>
-
-          <div class="wallet-card-footer">
-            <span>Ingresado ${formatMoney(totals.income)}</span>
-            <span>Gastado ${formatMoney(totals.expense)}</span>
-          </div>
-        `;
-
-        homeCardsList.appendChild(walletCard);
-
-        const detailCard = document.createElement("article");
-        detailCard.className = "card-detail";
-        detailCard.setAttribute("style", cardStyle);
-
-        detailCard.innerHTML = `
-          <div class="card-detail-header">
-            <div>
-              <div class="card-chip"></div>
-
-              <h3>${escapeHTML(card.name)}</h3>
-              <small>•••• ${escapeHTML(card.last4 || "0000")}</small>
-            </div>
-
-            <div class="card-color-dot"></div>
-          </div>
-
-          <div class="card-detail-balance">
-            ${formatMoney(totals.balance)}
-          </div>
-
-          <div class="card-stats">
-            <div class="card-stat">
-              <span>Ingresado</span>
-              <strong>${formatMoney(totals.income)}</strong>
-            </div>
-
-            <div class="card-stat">
-              <span>Gastado</span>
-              <strong>${formatMoney(totals.expense)}</strong>
-            </div>
-          </div>
-
-          <div class="card-actions">
-            <button
-              class="small-button"
-              type="button"
-              data-edit-card="${card.id}"
-            >
-              Editar
-            </button>
-
-            <button
-              class="small-button danger"
-              type="button"
-              data-delete-card="${card.id}"
-            >
-              Eliminar
-            </button>
-          </div>
-        `;
-
-        cardsGrid.appendChild(detailCard);
-      });
-    }
-
-    function getSortedTransactions() {
-      return [...transactions].sort((a, b) => {
-        const dateA =
-          new Date(`${a.date}T12:00:00`).getTime();
-        const dateB =
-          new Date(`${b.date}T12:00:00`).getTime();
-
-        if (dateB !== dateA) {
-          return dateB - dateA;
-        }
-
-        return b.createdAt - a.createdAt;
-      });
-    }
-
-    function renderTransactions() {
-      const sortedTransactions = getSortedTransactions();
-
-      const homeTransactions = showAllHomeTransactions
-        ? sortedTransactions
-        : sortedTransactions.slice(0, 5);
-
-      renderTransactionList(
-        transactionsList,
-        homeTransactions
-      );
-
-      renderTransactionList(
-        allTransactionsList,
-        sortedTransactions
-      );
-
-      showAllButton.textContent =
-        showAllHomeTransactions ? "Ver menos" : "Ver todos";
-
-      showAllButton.classList.toggle(
-        "hidden",
-        sortedTransactions.length <= 5
-      );
-    }
-
-    function renderTransactionList(container, items) {
-      container.innerHTML = "";
-
-      if (items.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            Todavía no tienes movimientos.<br>
-            Pulsa el botón + para añadir el primero.
-          </div>
-        `;
-
-        return;
-      }
-
-      items.forEach((transaction) => {
-        const isIncome = transaction.type === "income";
-        const card = cards.find(
-          (item) => item.id === transaction.cardId
-        );
-
-        const article = document.createElement("article");
-        article.className = "transaction";
-
-        article.innerHTML = `
-          <div class="transaction-icon ${transaction.type}">
-            ${isIncome ? "+" : "−"}
-          </div>
-
-          <div class="transaction-data">
-            <div class="transaction-title">
-              ${escapeHTML(
-                transaction.description ||
-                transaction.category ||
-                "Movimiento"
-              )}
-            </div>
-
-            <div class="transaction-date">
-              ${escapeHTML(card ? card.name : "Sin tarjeta")}
-              · ${formatVisibleDate(transaction.date)}
-            </div>
-          </div>
-
-          <div class="transaction-right">
-            <div class="transaction-amount ${transaction.type}">
-              ${isIncome ? "+" : "−"}${formatMoney(
-                transaction.amount
-              )}
-            </div>
-
-            <button
-              class="delete-button"
-              type="button"
-              aria-label="Eliminar"
-              data-delete-transaction="${transaction.id}"
-            >
-              ×
-            </button>
-          </div>
-        `;
-
-        container.appendChild(article);
-      });
-    }
-
-    function renderNotes() {
-      notesList.innerHTML = "";
-
-      const sortedNotes = [...notes].sort(
-        (a, b) => b.createdAt - a.createdAt
-      );
-
-      if (sortedNotes.length === 0) {
-        notesList.innerHTML = `
-          <div class="empty-state">
-            No tienes notas guardadas.<br>
-            Aquí puedes apuntar pagos, ideas o recordatorios.
-          </div>
-        `;
-
-        return;
-      }
-
-      sortedNotes.forEach((note) => {
-        const article = document.createElement("article");
-        article.className = "note-card";
-
-        article.innerHTML = `
-          <h3 class="note-title">
-            ${escapeHTML(note.title)}
-          </h3>
-
-          <p class="note-text">
-            ${escapeHTML(note.text)}
-          </p>
-
-          <div class="note-date">
-            ${new Intl.DateTimeFormat("es-ES", {
-              day: "numeric",
-              month: "long",
-              year: "numeric"
-            }).format(new Date(note.createdAt))}
-          </div>
-
-          <button
-            class="delete-button"
-            type="button"
-            aria-label="Eliminar nota"
-            data-delete-note="${note.id}"
-          >
-            ×
-          </button>
-        `;
-
-        notesList.appendChild(article);
-      });
-    }
-
-    function populateCardSelector() {
-      cardInput.innerHTML = "";
-
-      if (cards.length === 0) {
-        cardInput.innerHTML = `
-          <option value="">
-            Primero crea una tarjeta
-          </option>
-        `;
-
-        return;
-      }
-
-      cards.forEach((card) => {
-        const option = document.createElement("option");
-        option.value = card.id;
-        option.textContent = card.name;
-        cardInput.appendChild(option);
-      });
-    }
-
-    function showPage(pageId) {
-      document.querySelectorAll(".page").forEach((page) => {
-        page.classList.remove("active");
-      });
-
-      document.querySelectorAll(".nav-button").forEach((button) => {
-        button.classList.toggle(
-          "active",
-          button.dataset.page === pageId
-        );
-      });
-
-      document.getElementById(pageId).classList.add("active");
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-    }
-
-    function openEntryModal(type = "income") {
-      setCurrentEntryType(type);
-      entryModalOverlay.classList.remove("hidden");
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeEntryModal() {
-      entryModalOverlay.classList.add("hidden");
-      document.body.style.overflow = "";
-      entryForm.reset();
-      dateInput.value = formatDateForInput(new Date());
-      categoryInput.value = "Otros";
-    }
-
-    function setCurrentEntryType(type) {
-      currentEntryType = type;
-
-      document
-        .querySelectorAll("[data-entry-type]")
-        .forEach((button) => {
-          button.classList.toggle(
-            "active",
-            button.dataset.entryType === type
-          );
-        });
-
-      const isNote = type === "note";
-
-      moneyFields.classList.toggle("hidden", isNote);
-      noteFields.classList.toggle("hidden", !isNote);
-
-      if (type === "income") {
-        entryModalTitle.textContent = "Añadir ingreso";
-      }
-
-      if (type === "expense") {
-        entryModalTitle.textContent = "Añadir gasto";
-      }
-
-      if (type === "note") {
-        entryModalTitle.textContent = "Nueva nota";
-      }
-    }
-
-    function openCardModal(cardId = "") {
-      cardForm.reset();
-      editingCardId.value = "";
-      cardModalTitle.textContent = "Nueva tarjeta";
-
-      if (cardId) {
-        const card = cards.find((item) => item.id === cardId);
-
-        if (!card) {
-          return;
-        }
-
-        editingCardId.value = card.id;
-        cardNameInput.value = card.name;
-        cardInitialInput.value = card.initialBalance;
-        cardLast4Input.value = card.last4;
-        cardColorInput.value = card.color;
-        cardModalTitle.textContent = "Editar tarjeta";
-      }
-
-      cardModalOverlay.classList.remove("hidden");
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeCardModal() {
-      cardModalOverlay.classList.add("hidden");
-      document.body.style.overflow = "";
-      cardForm.reset();
-      editingCardId.value = "";
-    }
-
-    function openSettingsModal() {
-      currencyInput.value = currency;
-      settingsModalOverlay.classList.remove("hidden");
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeSettingsModal() {
-      settingsModalOverlay.classList.add("hidden");
-      document.body.style.overflow = "";
-    }
-
-    function deleteTransaction(id) {
-      transactions = transactions.filter(
-        (transaction) => transaction.id !== id
-      );
-
-      saveData();
-      renderDashboard();
-    }
-
-    function deleteNote(id) {
-      notes = notes.filter((note) => note.id !== id);
-      saveData();
-      renderDashboard();
-    }
-
-    function deleteCard(id) {
-      const hasTransactions = transactions.some(
-        (transaction) => transaction.cardId === id
-      );
-
-      if (hasTransactions) {
-        alert(
-          "Esta tarjeta tiene movimientos. Elimínalos primero."
-        );
-        return;
-      }
-
-      cards = cards.filter((card) => card.id !== id);
-      saveData();
-      renderDashboard();
-    }
-
-    entryForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      if (currentEntryType === "note") {
-        const title = noteTitleInput.value.trim();
-        const text = noteTextInput.value.trim();
-
-        if (!title || !text) {
-          alert("Completa el título y el contenido de la nota.");
-          return;
-        }
-
-        notes.push({
-          id: createId(),
-          title,
-          text,
-          createdAt: Date.now()
-        });
-      } else {
-        if (cards.length === 0) {
-          alert("Primero crea una tarjeta.");
-          return;
-        }
-
-        const amount = Number(amountInput.value);
-        const selectedCardId = cardInput.value;
-        const date = dateInput.value;
-
-        if (!amount || amount <= 0) {
-          alert("Escribe una cantidad válida.");
-          return;
-        }
-
-        if (!selectedCardId) {
-          alert("Selecciona una tarjeta.");
-          return;
-        }
-
-        if (!date) {
-          alert("Selecciona una fecha.");
-          return;
-        }
-
-        transactions.push({
-          id: createId(),
-          type: currentEntryType,
-          amount,
-          cardId: selectedCardId,
-          category: categoryInput.value,
-          description: descriptionInput.value.trim(),
-          date,
-          createdAt: Date.now()
-        });
-      }
-
-      saveData();
-      renderDashboard();
-      closeEntryModal();
-    });
-
-    cardForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      const name = cardNameInput.value.trim();
-      const initialBalance =
-        Number(cardInitialInput.value) || 0;
-      const last4 = cardLast4Input.value
-        .replace(/\D/g, "")
-        .slice(0, 4);
-      const color = cardColorInput.value;
-
-      if (!name) {
-        alert("Escribe un nombre para la tarjeta.");
-        return;
-      }
-
-      if (editingCardId.value) {
-        const index = cards.findIndex(
-          (card) => card.id === editingCardId.value
-        );
-
-        if (index !== -1) {
-          cards[index] = {
-            ...cards[index],
-            name,
-            initialBalance,
-            last4,
-            color
-          };
-        }
-      } else {
-        cards.push({
-          id: createId(),
-          name,
-          initialBalance,
-          last4,
-          color,
-          createdAt: Date.now()
-        });
-      }
-
-      saveData();
-      renderDashboard();
-      closeCardModal();
-    });
-
-    document
-      .querySelectorAll("[data-open-entry]")
-      .forEach((button) => {
-        button.addEventListener("click", () => {
-          openEntryModal(button.dataset.openEntry);
-        });
-      });
-
-    document
-      .querySelectorAll("[data-entry-type]")
-      .forEach((button) => {
-        button.addEventListener("click", () => {
-          setCurrentEntryType(button.dataset.entryType);
-        });
-      });
-
-    document
-      .querySelectorAll(".nav-button")
-      .forEach((button) => {
-        button.addEventListener("click", () => {
-          showPage(button.dataset.page);
-        });
-      });
-
-    document
-      .getElementById("floatingButton")
-      .addEventListener("click", () => {
-        openEntryModal("income");
-      });
-
-    document
-      .getElementById("addCardButton")
-      .addEventListener("click", () => {
-        openCardModal();
-      });
-
-    document
-      .getElementById("addNoteButton")
-      .addEventListener("click", () => {
-        openEntryModal("note");
-      });
-
-    document
-      .getElementById("showCardsButton")
-      .addEventListener("click", () => {
-        showPage("cardsPage");
-      });
-
-    document
-      .getElementById("settingsButton")
-      .addEventListener("click", openSettingsModal);
-
-    document
-      .getElementById("closeEntryModalButton")
-      .addEventListener("click", closeEntryModal);
-
-    document
-      .getElementById("closeCardModalButton")
-      .addEventListener("click", closeCardModal);
-
-    document
-      .getElementById("closeSettingsModalButton")
-      .addEventListener("click", closeSettingsModal);
-
-    document
-      .getElementById("saveSettingsButton")
-      .addEventListener("click", () => {
-        currency = currencyInput.value;
-        saveData();
-        renderDashboard();
-        closeSettingsModal();
-      });
-
-    document
-      .getElementById("showAllButton")
-      .addEventListener("click", () => {
-        showAllHomeTransactions =
-          !showAllHomeTransactions;
-
-        renderTransactions();
-      });
-
-    entryModalOverlay.addEventListener("click", (event) => {
-      if (event.target === entryModalOverlay) {
-        closeEntryModal();
-      }
-    });
-
-    cardModalOverlay.addEventListener("click", (event) => {
-      if (event.target === cardModalOverlay) {
-        closeCardModal();
-      }
-    });
-
-    settingsModalOverlay.addEventListener("click", (event) => {
-      if (event.target === settingsModalOverlay) {
-        closeSettingsModal();
-      }
-    });
-
-    document.addEventListener("click", (event) => {
-      const transactionButton =
-        event.target.closest("[data-delete-transaction]");
-
-      const noteButton =
-        event.target.closest("[data-delete-note]");
-
-      const editCardButton =
-        event.target.closest("[data-edit-card]");
-
-      const deleteCardButton =
-        event.target.closest("[data-delete-card]");
-
-      if (transactionButton) {
-        if (confirm("¿Eliminar este movimiento?")) {
-          deleteTransaction(
-            transactionButton.dataset.deleteTransaction
-          );
-        }
-      }
-
-      if (noteButton) {
-        if (confirm("¿Eliminar esta nota?")) {
-          deleteNote(noteButton.dataset.deleteNote);
-        }
-      }
-
-      if (editCardButton) {
-        openCardModal(editCardButton.dataset.editCard);
-      }
-
-      if (deleteCardButton) {
-        if (confirm("¿Eliminar esta tarjeta?")) {
-          deleteCard(deleteCardButton.dataset.deleteCard);
-        }
-      }
-    });
-
-    renderDashboard();
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
